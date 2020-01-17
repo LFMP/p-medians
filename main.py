@@ -78,7 +78,7 @@ def calculaIndividuos(nos): #calcula a quantidade de individuos a serem gerados
     return quantidade
 
 def montaPopulacao(nos, quantidade, medianas, qtdmedianas, populacao):
-        for i in range quantidade:
+        for i in range(quantidade):
             nos_copy = copy.deepcopy(nos)
             medianas_copy = copy.deepcopy(medianas)
             sortMedianas(nos_copy, medianas_copy, qtdmedianas)
