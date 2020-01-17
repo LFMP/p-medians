@@ -98,14 +98,21 @@ def sortMedianas(nos, medianas, qtdmedianas):
         medianas.append(element)
         nos.pop(str(element.key))
 
-def fazCruzamento(populacao, nos):
-    #filho = no(0,0,0,0,0,0,0)
+def fazCruzamento(populacao, nos, qtdmedianas):
+    filho = []
     nos_copy = copy.deepcopy(nos)
-    pai = heapq.heappop(populacao)
-    mae = heapq.heappop(populacao)
-    for i in pai.ligacoes:
-        if i in mae.ligacoes:
-           # filho.ligacoes.append(i)
+    pai = heapq.heappop(populacao)[1]
+    mae = heapq.heappop(populacao)[1]
+    for i in pai:
+        if i in mae:
+           filho.append(i)
+    #for i in range(qtdmedianas-len(filho)):
+    #    if len(filho) < qtdmedianas:
+    #        r = random.randrange(0, qtdmedianas)
+    #        if pai[r] not in filho:
+    #            filho.append(pai[r])
+    #            pass
+    montaIndividuo(nos_copy,filho)
 
 def montaIndividuo(nos, medianas):
     fitness = 0
