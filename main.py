@@ -1,7 +1,7 @@
 import math
 import heapq
 import random
-
+import copy
 
 class no:
     x: int
@@ -66,6 +66,26 @@ def montaConjuto(nos):
         )
     return qtdmedianas
 
+def calculaIndividuos(nos): #calcula a quantidade de individuos a serem gerados
+    func_value = 17,5 * math.log(len(nos))
+    resto = func_value/2
+    if resto > 1:
+        quantidade = math.ceil(func_value)
+    elif resto < 1:
+        quantidade = math.floor(func_value)
+    elif resto == 1:
+        quantidade = func_value - 1
+    return quantidade
+
+def montaPopulacao(nos, quantidade, medianas, qtdmedianas, populacao):
+        for i in range quantidade:
+            nos_copy = copy.deepcopy(nos)
+            medianas_copy = copy.deepcopy(medianas)
+            sortMedianas(nos_copy, medianas_copy, qtdmedianas)
+            fitness = montaIndividuo(nos_copy, medianas_copy)
+            for y in medianas_copy:
+                x = str(y.id)
+                populacao[x] = fitness
 
 def sortMedianas(nos, medianas, qtdmedianas):
     selecionados = []
@@ -97,22 +117,7 @@ def montaIndividuo(nos, medianas):
                 menorDistancia = []
             else:
                 aux = heapq.heappop(menorDistancia)
-    return fitness
-
-def calculaIndividuos(nos): #calcula a quantidade de individuos a serem gerados
-    func_value = 17,5 * math.log(len(nos))
-    resto = func_value/2
-    if resto > 1:
-        quantidade = math.ceil(func_value)
-    elif resto < 1:
-        quantidade = math.floor(func_value)
-    elif resto == 1:
-        quantidade = func_value - 1
-    return quantidade
-
-def gerarPopulacao(nos, quantidade):
-
-    
+    return fitness    
 
 nos = {}
 medianas = []
