@@ -99,6 +99,20 @@ def montaIndividuo(nos, medianas):
                 aux = heapq.heappop(menorDistancia)
     return fitness
 
+def calculaIndividuos(nos): #calcula a quantidade de individuos a serem gerados
+    func_value = 17,5 * math.log(len(nos))
+    resto = func_value/2
+    if resto > 1:
+        quantidade = math.ceil(func_value)
+    elif resto < 1:
+        quantidade = math.floor(func_value)
+    elif resto == 1:
+        quantidade = func_value - 1
+    return quantidade
+
+def gerarPopulacao(nos, quantidade):
+
+    
 
 nos = {}
 medianas = []
