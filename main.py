@@ -86,7 +86,7 @@ def montaPopulacao(nos, quantidade, medianas, qtdmedianas, populacao):
             x = []
             for y in medianas_copy:
                 x.append(str(y.key))
-            populacao[str(x)] = fitness
+            heapq.heappush(populacao, (fitness, str(x)))
 
 def sortMedianas(nos, medianas, qtdmedianas):
     selecionados = []
@@ -100,6 +100,10 @@ def sortMedianas(nos, medianas, qtdmedianas):
         medianas.append(element)
         nos.pop(str(element.key))
 
+def fazCruzamento(populacao):
+    pai = heapq.heappop(populacao)
+    mae = heapq.heappop(populacao)
+    
 
 def montaIndividuo(nos, medianas):
     fitness = 0
@@ -123,7 +127,7 @@ def montaIndividuo(nos, medianas):
 nos = {}
 medianas = []
 individuos = []
-populacao = {}
+populacao = []
 qtdvertice, qtdmedianas = montaConjuto(nos)
 montaPopulacao(nos,calculaIndividuos(nos,qtdvertice),medianas,qtdmedianas,populacao)
 print(populacao)
