@@ -64,10 +64,10 @@ def montaConjuto(nos):
                 )
             }
         )
-    return qtdmedianas
+    return qtdvertice, qtdmedianas
 
-def calculaIndividuos(nos): #calcula a quantidade de individuos a serem gerados
-    func_value = 17,5 * math.log(len(nos))
+def calculaIndividuos(nos,qtdvertice): #calcula a quantidade de individuos a serem gerados
+    func_value = 17.5 * math.log(qtdvertice)
     resto = func_value/2
     if resto > 1:
         quantidade = math.ceil(func_value)
@@ -83,9 +83,10 @@ def montaPopulacao(nos, quantidade, medianas, qtdmedianas, populacao):
             medianas_copy = copy.deepcopy(medianas)
             sortMedianas(nos_copy, medianas_copy, qtdmedianas)
             fitness = montaIndividuo(nos_copy, medianas_copy)
+            x = []
             for y in medianas_copy:
-                x = str(y.id)
-                populacao[x] = fitness
+                x.append(str(y.key))
+            populacao[str(x)] = fitness
 
 def sortMedianas(nos, medianas, qtdmedianas):
     selecionados = []
@@ -123,7 +124,6 @@ nos = {}
 medianas = []
 individuos = []
 populacao = {}
-qtdmedianas = montaConjuto(nos)
-sortMedianas(nos, medianas, qtdmedianas)
-fitness = montaIndividuo(nos, medianas)
-print(fitness)
+qtdvertice, qtdmedianas = montaConjuto(nos)
+montaPopulacao(nos,calculaIndividuos(nos,qtdvertice),medianas,qtdmedianas,populacao)
+print(populacao)
