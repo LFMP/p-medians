@@ -86,7 +86,6 @@ def montaPopulacao(nos, quantidade, medianas, qtdmedianas, populacao):
         medianas_copy = copy.deepcopy(medianas)
         sortMedianas(nos_copy, medianas_copy, qtdmedianas)
         fitness = montaIndividuo(nos_copy, medianas_copy)
-        x = []
         heapq.heappush(populacao, (fitness, medianas_copy))
 
 
@@ -112,12 +111,12 @@ def fazCruzamento(populacao, nos, qtdmedianas):
             filho.append(i)
     for i in range(qtdmedianas - len(filho) // 2):
         r = random.randrange(0, qtdmedianas)
-        while (pai[r] in filho):
+        while pai[r] in filho:
             r = random.randrange(0, qtdmedianas)
         filho.append(pai[r])
-    for i in range(qtdmedianas - len (filho)):
+    for i in range(qtdmedianas - len(filho)):
         r = random.randrange(0, qtdmedianas)
-        while (mae[r] in filho):
+        while mae[r] in filho:
             r = random.randrange(0, qtdmedianas)
         filho.append(mae[r])
     fitness = montaIndividuo(nos_copy, filho)
@@ -150,5 +149,10 @@ individuos = []
 populacao = []
 qtdvertice, qtdmedianas = montaConjuto(nos)
 montaPopulacao(nos, calculaIndividuos(qtdvertice), medianas, qtdmedianas, populacao)
-nos_copy = copy.deepcopy(nos)
-filho, filho_fitness = fazCruzamento(populacao,nos_copy,qtdmedianas)
+for i in range(100):
+    nos_copy = copy.deepcopy(nos)
+    filho, filho_fitness = fazCruzamento(copy.deepcopy(populacao), nos_copy, qtdmedianas)
+    if filho_fitness < populacao[len(populacao) - 1][0]:
+        populacao.remove(populacao[len(populacao) - 1])
+        heapq.heappush(populacao, (filho_fitness, filho))
+print(heapq.heappop(populacao))
