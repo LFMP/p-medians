@@ -121,7 +121,7 @@ def fazCruzamento(populacao, nos, qtdmedianas):
             r = random.randrange(0, qtdmedianas)
         filho.append(mae[r])
     fitness = montaIndividuo(nos_copy, filho)
-    return nos_copy, fitness
+    return filho, fitness
 
 
 def montaIndividuo(nos, medianas):
@@ -151,3 +151,4 @@ populacao = []
 qtdvertice, qtdmedianas = montaConjuto(nos)
 montaPopulacao(nos, calculaIndividuos(qtdvertice), medianas, qtdmedianas, populacao)
 nos_copy = copy.deepcopy(nos)
+filho, filho_fitness = fazCruzamento(populacao,nos_copy,qtdmedianas)
