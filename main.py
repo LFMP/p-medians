@@ -3,6 +3,7 @@ import heapq
 import random
 import copy
 
+
 class no:
     x: int
     y: int
@@ -66,9 +67,10 @@ def montaConjuto(nos):
         )
     return qtdvertice, qtdmedianas
 
-def calculaIndividuos(nos,qtdvertice): #calcula a quantidade de individuos a serem gerados
+
+def calculaIndividuos(qtdvertice):  # calcula a quantidade de individuos a serem gerados
     func_value = 17.5 * math.log(qtdvertice)
-    resto = func_value/2
+    resto = func_value / 2
     if resto > 1:
         quantidade = math.ceil(func_value)
     elif resto < 1:
@@ -77,14 +79,16 @@ def calculaIndividuos(nos,qtdvertice): #calcula a quantidade de individuos a ser
         quantidade = func_value - 1
     return quantidade
 
+
 def montaPopulacao(nos, quantidade, medianas, qtdmedianas, populacao):
-        for i in range(quantidade):
-            nos_copy = copy.deepcopy(nos)
-            medianas_copy = copy.deepcopy(medianas)
-            sortMedianas(nos_copy, medianas_copy, qtdmedianas)
-            fitness = montaIndividuo(nos_copy, medianas_copy)
-            x = []
-            heapq.heappush(populacao, (fitness, medianas_copy))
+    for i in range(quantidade):
+        nos_copy = copy.deepcopy(nos)
+        medianas_copy = copy.deepcopy(medianas)
+        sortMedianas(nos_copy, medianas_copy, qtdmedianas)
+        fitness = montaIndividuo(nos_copy, medianas_copy)
+        x = []
+        heapq.heappush(populacao, (fitness, medianas_copy))
+
 
 def sortMedianas(nos, medianas, qtdmedianas):
     selecionados = []
@@ -98,21 +102,27 @@ def sortMedianas(nos, medianas, qtdmedianas):
         medianas.append(element)
         nos.pop(str(element.key))
 
+
 def fazCruzamento(populacao, nos, qtdmedianas):
     filho = []
-    nos_copy = copy.deepcopy(nos)
     pai = heapq.heappop(populacao)[1]
     mae = heapq.heappop(populacao)[1]
     for i in pai:
         if i in mae:
-           filho.append(i)
-    #for i in range(qtdmedianas-len(filho)):
-    #    if len(filho) < qtdmedianas:
-    #        r = random.randrange(0, qtdmedianas)
-    #        if pai[r] not in filho:
-    #            filho.append(pai[r])
-    #            pass
-    montaIndividuo(nos_copy,filho)
+            filho.append(i)
+    for i in range(qtdmedianas - len(filho) // 2):
+        r = random.randrange(0, qtdmedianas)
+        while (pai[r] in filho):
+            r = random.randrange(0, qtdmedianas)
+        filho.append(pai[r])
+    for i in range(qtdmedianas - len (filho)):
+        r = random.randrange(0, qtdmedianas)
+        while (mae[r] in filho):
+            r = random.randrange(0, qtdmedianas)
+        filho.append(mae[r])
+    fitness = montaIndividuo(nos_copy, filho)
+    return nos_copy, fitness
+
 
 def montaIndividuo(nos, medianas):
     fitness = 0
@@ -131,12 +141,13 @@ def montaIndividuo(nos, medianas):
                 menorDistancia = []
             else:
                 aux = heapq.heappop(menorDistancia)
-    return fitness    
+    return fitness
+
 
 nos = {}
 medianas = []
 individuos = []
 populacao = []
 qtdvertice, qtdmedianas = montaConjuto(nos)
-montaPopulacao(nos,calculaIndividuos(nos,qtdvertice),medianas,qtdmedianas,populacao)
-print(populacao)
+montaPopulacao(nos, calculaIndividuos(qtdvertice), medianas, qtdmedianas, populacao)
+nos_copy = copy.deepcopy(nos)
