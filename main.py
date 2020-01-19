@@ -122,6 +122,14 @@ def fazCruzamento(populacao, nos, qtdmedianas):
     fitness = montaIndividuo(nos_copy, filho)
     return filho, fitness
 
+def fazMutacao(populacao, nos, qtdmedianas):
+    qtdMutacao = math.ceil(len(populacao) * 0.05)
+    for i in qtdMutacao:
+        for j in qtdmedianas:
+            r = random.randrange(0, qtdmedianas)
+            for k in r:
+                #modifica uma mediana aleatória
+    #calculo novamente do individuo
 
 def montaIndividuo(nos, medianas):
     fitness = 0
