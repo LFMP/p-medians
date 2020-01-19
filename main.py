@@ -128,8 +128,9 @@ def fazMutacao(populacao, nos, qtdmedianas):
         individuo = random.choice(populacao)[1] # pega um elemento aleatorio da populacao
         qtdMutacoes = random.choice(0,qtdmedianas) # quantas medianas serao trocadas
         for i in range(qtdMutacoes):
-            # trocar elementos de no com individuo
-            # lembrar de alterar o "ligados" e o "ocupado"
+            individuo[i] = random.choice(nos)[1]# trocar elementos de no com individuo
+            individuo[i].ligacoes = []# lembrar de alterar o "ligados" e o "ocupado"
+            individuo[i].ocupado = individuo[i].peso
         newFitness = montaIndividuo(nos,individuo) # calcula fitness da mediana (individuo) alterada
         heapq.heappush(populacao,(newFitness,individuo))
 
