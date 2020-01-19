@@ -165,4 +165,5 @@ for i in range(100):
     if filho_fitness < populacao[len(populacao) - 1][0]:
         populacao.remove(populacao[len(populacao) - 1])
         heapq.heappush(populacao, (filho_fitness, filho))
-fazMutacao(populacao,nos,qtdmedianas)
+    nos_copy = copy.deepcopy(nos)
+    fazMutacao(populacao,nos_copy,qtdmedianas)
