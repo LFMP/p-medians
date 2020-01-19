@@ -123,13 +123,15 @@ def fazCruzamento(populacao, nos, qtdmedianas):
     return filho, fitness
 
 def fazMutacao(populacao, nos, qtdmedianas):
-    qtdMutacao = math.ceil(len(populacao) * 0.05)
-    for i in qtdMutacao:
-        for j in qtdmedianas:
-            r = random.randrange(0, qtdmedianas)
-            for k in r:
-                #modifica uma mediana aleatória
-    #calculo novamente do individuo
+    qtdIndividuosMutados = math.ceil(len(populacao) * 0.05)
+    for i in range(qtdIndividuosMutados):
+        individuo = random.choice(populacao)[1] # pega um elemento aleatorio da populacao
+        qtdMutacoes = random.choice(0,qtdmedianas) # quantas medianas serao trocadas
+        for i in range(qtdMutacoes):
+            # trocar elementos de no com individuo
+            # lembrar de alterar o "ligados" e o "ocupado"
+        newFitness = montaIndividuo(nos,individuo) # calcula fitness da mediana (individuo) alterada
+        heapq.heappush(populacao,(newFitness,individuo))
 
 def montaIndividuo(nos, medianas):
     fitness = 0
@@ -163,4 +165,4 @@ for i in range(100):
     if filho_fitness < populacao[len(populacao) - 1][0]:
         populacao.remove(populacao[len(populacao) - 1])
         heapq.heappush(populacao, (filho_fitness, filho))
-print(heapq.heappop(populacao))
+fazMutacao(populacao,nos,qtdmedianas)
