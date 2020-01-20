@@ -138,7 +138,7 @@ def fazMutacao(populacao, nos, qtdmedianas):
     qtdIndividuosMutados = math.ceil(len(populacao) * 0.05)
     for i in range(qtdIndividuosMutados):
         original = random.choice(populacao)
-        while original == populacao[0] or original == populacao[1]:
+        while original == populacao[0]:
             original = random.choice(populacao)
         individuo = original[1]
         qtdMutacoes = random.randrange(
@@ -167,7 +167,7 @@ def fazMutacao(populacao, nos, qtdmedianas):
         newFitness, alocado = montaIndividuo(
             nos_copy, copy.deepcopy(individuo)
         )
-        if(alocado and newFitness <= populacao[len(populacao)-1][0] or alocado and newFitness <= populacao[0][0]):
+        if(alocado and newFitness <= populacao[len(populacao)-1][0]):
             populacao.remove(original)
             heapq.heappush(populacao, (newFitness, individuo))
         else:
