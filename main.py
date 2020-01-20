@@ -135,14 +135,13 @@ def fazCruzamento(populacao, nos, qtdmedianas):
 
 
 def fazMutacao(populacao, nos, qtdmedianas):
-    qtdIndividuosMutados = math.ceil(len(populacao) * 0.05)
+    qtdIndividuosMutados = math.ceil(len(populacao) * 0.42)
+    qtdElite = math.ceil(len(populacao) * 0.05)
     for i in range(qtdIndividuosMutados):
-        original = random.choice(populacao)
-        while original == populacao[0]:
-            original = random.choice(populacao)
+        original = random.choice(list(populacao)[qtdElite:])
         individuo = original[1]
         qtdMutacoes = random.randrange(
-            0, qtdmedianas
+            1, qtdmedianas - 1
         ) 
         nos_copy = copy.deepcopy(nos)
         for j in range(qtdMutacoes):
