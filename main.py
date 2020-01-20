@@ -136,11 +136,12 @@ def fazMutacao(populacao, nos, qtdmedianas):
         individuo = original[1]
         qtdMutacoes = random.randrange(
             0, qtdmedianas
-        )  # quantas medianas serao trocadas
+        ) 
+        nos_copy = copy.deepcopy(nos)
         for j in range(qtdMutacoes):
-            escolhido = nos[random.choice(list(nos))]
-            nos.pop(str(escolhido.key))
-            nos.update(
+            escolhido = nos[random.choice(list(nos_copy))]
+            nos_copy.pop(str(escolhido.key))
+            nos_copy.update(
                 {
                     str(individuo[j].key): no(
                         individuo[j].x,
@@ -157,9 +158,9 @@ def fazMutacao(populacao, nos, qtdmedianas):
             individuo[j].ligacoes = []
             individuo[j].ocupado = escolhido.peso
         newFitness, alocado = montaIndividuo(
-            nos, copy.deepcopy(individuo)
+            nos_copy, copy.deepcopy(individuo)
         )
-        if(alocado):
+        if(alocado and newFitness <= original[0]):
             populacao.remove(original)
             heapq.heappush(populacao, (newFitness, individuo))
         else:
@@ -197,7 +198,7 @@ individuos = []
 populacao = []
 qtdvertice, qtdmedianas = montaConjuto(nos)
 montaPopulacao(copy.deepcopy(nos), calculaIndividuos(qtdvertice), medianas, qtdmedianas, populacao)
-for i in range(100):
+for i in range(1000):
     nos_copy = copy.deepcopy(nos)
     filho, filho_fitness = fazCruzamento(
         copy.deepcopy(populacao), nos_copy, qtdmedianas
@@ -207,4 +208,5 @@ for i in range(100):
         heapq.heappush(populacao, (filho_fitness, filho))
     nos_copy = copy.deepcopy(nos)
     fazMutacao(populacao, nos_copy, qtdmedianas)
+    print(populacao[0][0])
 print(heapq.heappop(populacao))
