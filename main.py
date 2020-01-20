@@ -127,9 +127,8 @@ def fazCruzamento(populacao, nos, qtdmedianas):
 def fazMutacao(populacao, nos, qtdmedianas):
     qtdIndividuosMutados = math.ceil(len(populacao) * 0.05)
     for i in range(qtdIndividuosMutados):
-        individuo = random.choice(populacao)  # pega um elemento aleatorio da populacao
-        populacao.remove(individuo)
-        individuo = individuo[1]
+        original = random.choice(populacao)  # pega um elemento aleatorio da populacao
+        individuo = original[1]
         qtdMutacoes = random.randrange(
             0, qtdmedianas
         )  # quantas medianas serao trocadas
@@ -153,9 +152,10 @@ def fazMutacao(populacao, nos, qtdmedianas):
             individuo[j].ligacoes = []
             individuo[j].ocupado = escolhido.peso
         newFitness, alocado = montaIndividuo(
-            nos, individuo
+            nos, copy.deepcopy(individuo)
         )
         if(alocado):
+            populacao.remove(original)
             heapq.heappush(populacao, (newFitness, individuo))
         else:
             i = i -1
@@ -197,7 +197,7 @@ for i in range(100):
     filho, filho_fitness = fazCruzamento(
         copy.deepcopy(populacao), nos_copy, qtdmedianas
     )
-    if filho_fitness < populacao[len(populacao) - 1][0] and filho_fitness != 0:
+    if filho_fitness < populacao[len(populacao) - 1][0]:
         populacao.remove(populacao[len(populacao) - 1])
         heapq.heappush(populacao, (filho_fitness, filho))
     nos_copy = copy.deepcopy(nos)
