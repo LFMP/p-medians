@@ -86,6 +86,11 @@ def montaPopulacao(nos, quantidade, medianas, qtdmedianas, populacao):
         medianas_copy = copy.deepcopy(medianas)
         sortMedianas(nos_copy, medianas_copy, qtdmedianas)
         fitness, alocado = montaIndividuo(nos_copy, medianas_copy)
+        while (alocado == False):
+            nos_copy = copy.deepcopy(nos)
+            medianas_copy = copy.deepcopy(medianas)
+            sortMedianas(nos_copy, medianas_copy, qtdmedianas)
+            fitness, alocado = montaIndividuo(nos_copy, medianas_copy)
         heapq.heappush(populacao, (fitness, medianas_copy))
 
 
@@ -191,7 +196,7 @@ medianas = []
 individuos = []
 populacao = []
 qtdvertice, qtdmedianas = montaConjuto(nos)
-montaPopulacao(nos, calculaIndividuos(qtdvertice), medianas, qtdmedianas, populacao)
+montaPopulacao(copy.deepcopy(nos), calculaIndividuos(qtdvertice), medianas, qtdmedianas, populacao)
 for i in range(100):
     nos_copy = copy.deepcopy(nos)
     filho, filho_fitness = fazCruzamento(
