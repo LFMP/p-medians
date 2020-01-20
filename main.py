@@ -209,4 +209,4 @@ for i in range(1000):
     nos_copy = copy.deepcopy(nos)
     fazMutacao(populacao, nos_copy, qtdmedianas)
     print(populacao[0][0])
-print(heapq.heappop(populacao))
+print(populacao[0][0])
