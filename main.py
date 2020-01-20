@@ -107,17 +107,16 @@ def fazCruzamento(populacao, nos, qtdmedianas):
     pai = heapq.heappop(populacao)[1]
     mae = heapq.heappop(populacao)[1]
     for i in pai:
-        if i in mae:
-            filho.append(i)
+        for j in mae:
+            if(i.key == j.key):
+                filho.append(i)
+                break
+    print(filho)
     for i in range(qtdmedianas - len(filho) // 2):
         r = random.randrange(0, qtdmedianas)
-        while pai[r] in filho:
-            r = random.randrange(0, qtdmedianas)
         filho.append(pai[r])
     for i in range(qtdmedianas - len(filho)):
         r = random.randrange(0, qtdmedianas)
-        while mae[r] in filho:
-            r = random.randrange(0, qtdmedianas)
         filho.append(mae[r])
     fitness = montaIndividuo(nos_copy, filho)
     return filho, fitness
@@ -152,10 +151,8 @@ def fazMutacao(populacao, nos, qtdmedianas):
             individuo[i].ligacoes = []  # lembrar de alterar o "ligados" e o "ocupado"
             individuo[i].ocupado = escolhido.peso
         newFitness = montaIndividuo(
-            copy.deepcopy(nos), individuo
+            nos, individuo
         )  # calcula fitness da mediana (individuo) alterada
-        if (newFitness == 0):
-            print("filho da putaaaaaaaa")
         heapq.heappush(populacao, (newFitness, individuo))
 
 
@@ -190,7 +187,7 @@ for i in range(100):
     filho, filho_fitness = fazCruzamento(
         copy.deepcopy(populacao), nos_copy, qtdmedianas
     )
-    if filho_fitness < populacao[len(populacao) - 1][0]:
+    if filho_fitness < populacao[len(populacao) - 1][0] and filho_fitness != 0:
         populacao.remove(populacao[len(populacao) - 1])
         heapq.heappush(populacao, (filho_fitness, filho))
     nos_copy = copy.deepcopy(nos)
