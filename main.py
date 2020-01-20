@@ -110,20 +110,25 @@ def sortMedianas(nos, medianas, qtdmedianas):
 def fazCruzamento(populacao, nos, qtdmedianas):
     filho = []
     selecionado = []
+    possiveis = []
     pai = heapq.heappop(populacao)[1]
     mae = heapq.heappop(populacao)[1]
     for i in pai:
+        possiveis.append(str(i.key))
         for j in mae:
             if i.key == j.key:
                 filho.append(i)
                 selecionado.append(str(i.key))
                 break
+    for j in mae:
+        possiveis.append(str(j.key))
     for i in range(qtdmedianas - len(filho)):
-        r = random.choice(list(nos))
-        while str(r) in selecionado:
-            r = random.choice(list(nos))
+        r = random.choice(possiveis)
+        while r in selecionado:
+            r = random.choice(possiveis)
         filho.append(nos[r])
         selecionado.append(r)
+        possiveis.remove(r)
         nos.pop(str(r))
     fitness, alocado = montaIndividuo(nos, filho)
     return filho, fitness
@@ -132,7 +137,9 @@ def fazCruzamento(populacao, nos, qtdmedianas):
 def fazMutacao(populacao, nos, qtdmedianas):
     qtdIndividuosMutados = math.ceil(len(populacao) * 0.05)
     for i in range(qtdIndividuosMutados):
-        original = random.choice(populacao)  # pega um elemento aleatorio da populacao
+        original = random.choice(populacao)
+        while original == populacao[0]:
+            original = random.choice(populacao)
         individuo = original[1]
         qtdMutacoes = random.randrange(
             0, qtdmedianas
@@ -186,6 +193,8 @@ def montaIndividuo(nos, medianas):
                 menorDistancia = []
                 alocado=True
             else:
+                if(menorDistancia == []):
+                    break
                 aux = heapq.heappop(menorDistancia)
         if(alocado == False):
             break
