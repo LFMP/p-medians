@@ -131,14 +131,14 @@ def fazCruzamento(populacao, nos, qtdmedianas):
         possiveis.remove(r)
         nos.pop(str(r))
     fitness, alocado = montaIndividuo(nos, filho)
-    return filho, fitness
+    return filho, fitness, alocado
 
 
 def fazMutacao(populacao, nos, qtdmedianas):
     qtdIndividuosMutados = math.ceil(len(populacao) * 0.05)
     for i in range(qtdIndividuosMutados):
         original = random.choice(populacao)
-        while original == populacao[0]:
+        while original == populacao[0] or original == populacao[1]:
             original = random.choice(populacao)
         individuo = original[1]
         qtdMutacoes = random.randrange(
@@ -209,10 +209,10 @@ qtdvertice, qtdmedianas = montaConjuto(nos)
 montaPopulacao(copy.deepcopy(nos), calculaIndividuos(qtdvertice), medianas, qtdmedianas, populacao)
 for i in range(1000):
     nos_copy = copy.deepcopy(nos)
-    filho, filho_fitness = fazCruzamento(
+    filho, filho_fitness, normal = fazCruzamento(
         copy.deepcopy(populacao), nos_copy, qtdmedianas
     )
-    if filho_fitness < populacao[len(populacao) - 1][0]:
+    if filho_fitness < populacao[len(populacao) - 1][0] and normal:
         populacao.remove(populacao[len(populacao) - 1])
         heapq.heappush(populacao, (filho_fitness, filho))
     nos_copy = copy.deepcopy(nos)
