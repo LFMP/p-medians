@@ -122,17 +122,42 @@ def fazCruzamento(populacao, nos, qtdmedianas):
     fitness = montaIndividuo(nos_copy, filho)
     return filho, fitness
 
+
 def fazMutacao(populacao, nos, qtdmedianas):
     qtdIndividuosMutados = math.ceil(len(populacao) * 0.05)
     for i in range(qtdIndividuosMutados):
-        individuo = random.choice(populacao)[1] # pega um elemento aleatorio da populacao
-        qtdMutacoes = random.choice(0,qtdmedianas) # quantas medianas serao trocadas
+        individuo = random.choice(populacao)  # pega um elemento aleatorio da populacao
+        populacao.remove(individuo)
+        individuo = individuo[1]
+        qtdMutacoes = random.randrange(
+            0, qtdmedianas
+        )  # quantas medianas serao trocadas
         for i in range(qtdMutacoes):
-            individuo[i] = random.choice(nos)[1]# trocar elementos de no com individuo
-            individuo[i].ligacoes = []# lembrar de alterar o "ligados" e o "ocupado"
-            individuo[i].ocupado = individuo[i].peso
-        newFitness = montaIndividuo(nos,individuo) # calcula fitness da mediana (individuo) alterada
-        heapq.heappush(populacao,(newFitness,individuo))
+            escolhido = nos[random.choice(list(nos))]
+            nos.pop(str(escolhido.key))
+            nos.update(
+                {
+                    str(individuo[i].key): no(
+                        individuo[i].x,
+                        individuo[i].y,
+                        individuo[i].capacidade,
+                        individuo[i].peso,
+                        individuo[i].peso,
+                        [],
+                        individuo[i].key,
+                    )
+                }
+            )
+            individuo[i] = escolhido  # trocar elementos de no com individuo
+            individuo[i].ligacoes = []  # lembrar de alterar o "ligados" e o "ocupado"
+            individuo[i].ocupado = escolhido.peso
+        newFitness = montaIndividuo(
+            copy.deepcopy(nos), individuo
+        )  # calcula fitness da mediana (individuo) alterada
+        if (newFitness == 0):
+            print("filho da putaaaaaaaa")
+        heapq.heappush(populacao, (newFitness, individuo))
+
 
 def montaIndividuo(nos, medianas):
     fitness = 0
@@ -144,7 +169,7 @@ def montaIndividuo(nos, medianas):
             )
         while menorDistancia != []:
             aux = heapq.heappop(menorDistancia)
-            if aux[1].ocupado + nos[i].peso < aux[1].capacidade:
+            if aux[1].ocupado + nos[i].peso <= aux[1].capacidade:
                 fitness += calculaDistancia(nos[i].x, nos[i].y, aux[1].x, aux[1].y)
                 aux[1].ligacoes.append(nos[i].key)
                 aux[1].ocupado += nos[i].peso
@@ -162,9 +187,12 @@ qtdvertice, qtdmedianas = montaConjuto(nos)
 montaPopulacao(nos, calculaIndividuos(qtdvertice), medianas, qtdmedianas, populacao)
 for i in range(100):
     nos_copy = copy.deepcopy(nos)
-    filho, filho_fitness = fazCruzamento(copy.deepcopy(populacao), nos_copy, qtdmedianas)
+    filho, filho_fitness = fazCruzamento(
+        copy.deepcopy(populacao), nos_copy, qtdmedianas
+    )
     if filho_fitness < populacao[len(populacao) - 1][0]:
         populacao.remove(populacao[len(populacao) - 1])
         heapq.heappush(populacao, (filho_fitness, filho))
     nos_copy = copy.deepcopy(nos)
-    fazMutacao(populacao,nos_copy,qtdmedianas)
+    fazMutacao(populacao, nos_copy, qtdmedianas)
+print(heapq.heappop(populacao))
