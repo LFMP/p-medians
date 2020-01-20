@@ -111,13 +111,14 @@ def fazCruzamento(populacao, nos, qtdmedianas):
         for j in mae:
             if i.key == j.key:
                 filho.append(i)
-                selecionado.append(i.key)
+                selecionado.append(str(i.key))
                 break
     for i in range(qtdmedianas - len(filho)):
         r = random.choice(list(nos))
-        while r in selecionado:
+        while str(r) in selecionado:
             r = random.choice(list(nos))
         filho.append(nos[r])
+        selecionado.append(r)
         nos.pop(str(r))
     fitness = montaIndividuo(nos, filho)
     return filho, fitness
