@@ -135,7 +135,7 @@ def fazCruzamento(populacao, nos, qtdmedianas):
 
 
 def fazMutacao(populacao, nos, qtdmedianas):
-    qtdIndividuosMutados = math.ceil(len(populacao) * 0.83794)
+    qtdIndividuosMutados = math.ceil(len(populacao) * 0.2)
     qtdElite = math.ceil(len(populacao) * 0.1)
     for i in range(qtdIndividuosMutados):
         original = random.choice(list(populacao)[qtdElite+1:])
@@ -166,21 +166,33 @@ def fazMutacao(populacao, nos, qtdmedianas):
         newFitness, alocado = montaIndividuo(
             nos_copy, copy.deepcopy(individuo)
         )
-        if(alocado):
+        if(alocado and newFitness <= populacao[len(populacao)-1][0]):
             populacao.remove(original)
             heapq.heappush(populacao, (newFitness, individuo))
         else:
             i = i -1
 
-def buscaLocal(populacao, nos, qtdmedianas):
-    populacao_copy = copy.deepcopy(populacao)
-    qtdElite = math.ceil(len(populacao) * 0.1)
-    indBuscaRealizada = random.randrange(0, qtdElite)
-    individuo = populacao_copy[indBuscaRealizada]
-    nos_copy = copy.deepcopy(nos)
-    for i in range qtdmedianas:
-        escolhido = nos[]
-
+def buscaLocal(populacao, nos, qtdmedianas, qtdvertice):
+    for i in range (qtdmedianas):
+        original = populacao[0]
+        individuo = original[1]
+        fitness = original[0]
+        randomNos = []
+        for k in range(qtdmedianas):
+            aux = random.choice(list(nos))
+            while aux in randomNos:
+                aux = random.choice(list(nos))
+            randomNos.append(aux)
+        for index,j in enumerate(randomNos):
+            nos_copy =  copy.deepcopy(nos)
+            mediana_copy = copy.deepcopy(individuo)
+            nos_copy[individuo[i].key] = copy.deepcopy(individuo[i])
+            mediana_copy[i] = nos_copy.pop(randomNos[index])
+            newFitness, alocado = montaIndividuo(nos_copy,mediana_copy)
+            if (alocado and newFitness <= fitness):
+                populacao[0] = (newFitness, mediana_copy)
+                i = 0
+                break
 
 def montaIndividuo(nos, medianas):
     fitness = 0
@@ -215,7 +227,7 @@ individuos = []
 populacao = []
 qtdvertice, qtdmedianas = montaConjuto(nos)
 montaPopulacao(copy.deepcopy(nos), calculaIndividuos(qtdvertice), medianas, qtdmedianas, populacao)
-for i in range(1000):
+for i in range(300):
     nos_copy = copy.deepcopy(nos)
     filho, filho_fitness, normal = fazCruzamento(
         copy.deepcopy(populacao), nos_copy, qtdmedianas
@@ -224,6 +236,7 @@ for i in range(1000):
         populacao.remove(populacao[len(populacao) - 1])
         heapq.heappush(populacao, (filho_fitness, filho))
     nos_copy = copy.deepcopy(nos)
+    buscaLocal(populacao,nos_copy,qtdmedianas,qtdvertice)
     fazMutacao(populacao, nos_copy, qtdmedianas)
     print(populacao[0][0])
 print(populacao[0][0])
