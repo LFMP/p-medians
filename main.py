@@ -172,6 +172,15 @@ def fazMutacao(populacao, nos, qtdmedianas):
         else:
             i = i -1
 
+def buscaLocal(populacao, nos, qtdmedianas):
+    populacao_copy = copy.deepcopy(populacao)
+    qtdElite = math.ceil(len(populacao) * 0.1)
+    indBuscaRealizada = random.randrange(0, qtdElite)
+    individuo = populacao_copy[indBuscaRealizada]
+    nos_copy = copy.deepcopy(nos)
+    for i in range qtdmedianas:
+        escolhido = nos[]
+
 
 def montaIndividuo(nos, medianas):
     fitness = 0
