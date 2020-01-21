@@ -200,7 +200,8 @@ def buscaLocalFilho(populacao, nos, qtdmedianas, qtdvertice, filho):
 
 
 def buscaLocal(populacao, nos, qtdmedianas, qtdvertice):
-    original = populacao[0]
+    indiceDoOriginal = random.randrange(0,math.ceil(len(populacao) * 0.1))
+    original = populacao[indiceDoOriginal]
     for i in range(qtdmedianas):
         novoIndividuo = False
         individuo = original[1]
@@ -220,7 +221,7 @@ def buscaLocal(populacao, nos, qtdmedianas, qtdvertice):
                 index2.ocupado = index2.peso
             newFitness, alocado = montaIndividuo(nos_copy, filho_copy)
             if alocado and newFitness <= fitness:
-                heapq.heappop(populacao)
+                populacao.pop(indiceDoOriginal)
                 heapq.heappush(populacao, (newFitness, filho_copy))
                 individuo = filho_copy
                 fitness = newFitness
