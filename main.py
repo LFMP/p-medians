@@ -227,7 +227,7 @@ individuos = []
 populacao = []
 qtdvertice, qtdmedianas = montaConjuto(nos)
 montaPopulacao(copy.deepcopy(nos), calculaIndividuos(qtdvertice), medianas, qtdmedianas, populacao)
-for i in range(300):
+for i in range(100):
     nos_copy = copy.deepcopy(nos)
     filho, filho_fitness, normal = fazCruzamento(
         copy.deepcopy(populacao), nos_copy, qtdmedianas
