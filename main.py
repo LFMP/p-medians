@@ -223,8 +223,7 @@ def buscaLocal(populacao, nos, qtdmedianas, qtdvertice):
             if alocado and newFitness <= fitness:
                 populacao.pop(indiceDoOriginal)
                 heapq.heappush(populacao, (newFitness, filho_copy))
-                individuo = filho_copy
-                fitness = newFitness
+                original = (newFitness,filho_copy)
                 novoIndividuo = False
                 break
         if novoIndividuo:
