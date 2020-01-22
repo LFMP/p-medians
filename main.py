@@ -136,9 +136,9 @@ def fazCruzamento(populacao, nos, qtdmedianas):
 
 def fazMutacao(populacao, nos, qtdmedianas):
     qtdIndividuosMutados = math.ceil(len(populacao) * 0.4)
-    qtdElite = math.ceil(len(populacao) * 0.1)
+    qtdElite = math.ceil(len(populacao) * 0.05)
     for i in range(qtdIndividuosMutados):
-        original = random.choice(list(populacao)[qtdElite + 1 :])
+        original = random.choice(list(populacao)[qtdElite:])
         individuo = original[1]
         qtdMutacoes = random.randrange(1, qtdmedianas)
         nos_copy = copy.deepcopy(nos)
@@ -162,7 +162,7 @@ def fazMutacao(populacao, nos, qtdmedianas):
             individuo[j].ligacoes = []
             individuo[j].ocupado = escolhido.peso
         newFitness, alocado = montaIndividuo(nos_copy, copy.deepcopy(individuo))
-        if alocado and newFitness <= populacao[len(populacao) - 1][0]:
+        if alocado and newFitness < populacao[len(populacao) - 1][0]:
             populacao.remove(original)
             heapq.heappush(populacao, (newFitness, individuo))
         else:
@@ -171,37 +171,6 @@ def fazMutacao(populacao, nos, qtdmedianas):
 
 def buscaLocalFilho(populacao, nos, qtdmedianas, qtdvertice, filho):
     original = filho
-    for i in range(qtdmedianas):
-        novoIndividuo = False
-        fitness = original[0]
-        individuo = original[1]
-        randomNos = []
-        for k in range(qtdmedianas):
-            aux = random.choice(list(nos))
-            while aux in randomNos:
-                aux = random.choice(list(nos))
-            randomNos.append(aux)
-        for index, j in enumerate(randomNos):
-            nos_copy = copy.deepcopy(nos)
-            filho_copy = copy.deepcopy(individuo)
-            filho_copy[i] = nos_copy.pop(j)
-            nos_copy[str(individuo[i].key)] = filho_copy[i]
-            for index2 in filho_copy:
-                index2.ocupado = index2.peso
-            newFitness, alocado = montaIndividuo(nos_copy, filho_copy)
-            if alocado and newFitness <= fitness:
-                original = (newFitness, filho_copy)
-                filho = original
-                novoIndividuo = False
-                break
-        if novoIndividuo:
-            i = 0
-    
-
-
-def buscaLocal(populacao, nos, qtdmedianas, qtdvertice):
-    indiceDoOriginal = random.randrange(0,math.ceil(len(populacao) * 0.1))
-    original = populacao[indiceDoOriginal]
     for i in range(qtdmedianas):
         novoIndividuo = False
         individuo = original[1]
@@ -221,6 +190,36 @@ def buscaLocal(populacao, nos, qtdmedianas, qtdvertice):
                 index2.ocupado = index2.peso
             newFitness, alocado = montaIndividuo(nos_copy, filho_copy)
             if alocado and newFitness <= fitness:
+                original = (newFitness,filho_copy)
+                novoIndividuo = False
+                break
+        if novoIndividuo:
+            i = 0
+    
+
+
+def buscaLocal(populacao, nos, qtdmedianas, qtdvertice):
+    indiceDoOriginal = random.randrange(0,math.ceil(len(populacao) * 0.05))
+    original = populacao[indiceDoOriginal]
+    for i in range(qtdmedianas):
+        novoIndividuo = False
+        individuo = original[1]
+        fitness = original[0]
+        randomNos = []
+        for k in range(qtdmedianas):
+            aux = random.choice(list(nos))
+            while aux in randomNos:
+                aux = random.choice(list(nos))
+            randomNos.append(aux)
+        for index, j in enumerate(randomNos):
+            nos_copy = copy.deepcopy(nos)
+            filho_copy = copy.deepcopy(individuo)
+            nos_copy[individuo[i].key] = individuo[i]
+            filho_copy[i] = nos_copy.pop(j)
+            for index2 in filho_copy:
+                index2.ocupado = index2.peso
+            newFitness, alocado = montaIndividuo(nos_copy, filho_copy)
+            if alocado and newFitness < fitness:
                 populacao.pop(indiceDoOriginal)
                 heapq.heappush(populacao, (newFitness, filho_copy))
                 original = (newFitness,filho_copy)
@@ -271,9 +270,10 @@ for i in range(100):
         copy.deepcopy(populacao), nos_copy, qtdmedianas
     )
     if filho_fitness <= populacao[len(populacao) - 1][0] and normal:
+        #buscaLocalFilho(populacao,nos_copy,qtdmedianas,qtdvertice,(filho_fitness,filho))
         populacao.remove(populacao[len(populacao) - 1])
         heapq.heappush(populacao, (filho_fitness, filho))
-    buscaLocal(populacao,nos_copy,qtdmedianas,qtdvertice)
+    buscaLocal(populacao,copy.deepcopy(nos),qtdmedianas,qtdvertice)
     nos_copy = copy.deepcopy(nos)
     fazMutacao(populacao, nos_copy, qtdmedianas)
     print(populacao[0][0])
