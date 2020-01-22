@@ -195,11 +195,6 @@ def buscaLocal(populacao, nos, qtdmedianas, qtdvertice):
             nos_copy = copy.deepcopy(nos)
             filho_copy = copy.deepcopy(individuo)
             filho_copy[i] = nos_copy[j]
-            for index2 in filho_copy:
-                print("velho: " + str(index2.ocupado))
-                index2.ocupado = index2.peso
-                print("novo: " + str(index2.ocupado))
-                print("########################################3")
             removeMedianas(nos_copy,filho_copy)
             newFitness, alocado = montaIndividuo(nos_copy, filho_copy)
             if alocado and newFitness < fitness:
@@ -216,6 +211,8 @@ def montaIndividuo(nos, medianas):
     fitness = 0
     alocado = False
     #print(len(nos))
+    for i in medianas:
+        i.ocupado = i.peso
     for i in nos:
         alocado = False
         menorDistancia = []
@@ -262,5 +259,5 @@ for i in range(100):
     buscaLocal(populacao, copy.deepcopy(nos), qtdmedianas, qtdvertice)
     nos_copy = copy.deepcopy(nos)
     fazMutacao(populacao, nos_copy, qtdmedianas)
-    #print(populacao[0][0])
+    print(populacao[0][0])
 print(populacao[0][0])
