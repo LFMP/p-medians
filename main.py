@@ -96,6 +96,7 @@ def montaPopulacao(nos, quantidade, medianas, qtdmedianas, populacao):
 
 def sortMedianas(nos, medianas, qtdmedianas):
     selecionados = []
+    random.seed()
     selecionados.append(random.randrange(0, len(nos)))
     for i in range(qtdmedianas):
         r = random.randrange(0, len(nos))
@@ -128,6 +129,7 @@ def fazCruzamento(populacao, nos, qtdmedianas):
                 break
     for j in mae:
         possiveis.append(str(j.key))
+    random.seed()
     for i in range(qtdmedianas - len(filho)):
         r = random.choice(possiveis)
         while r in selecionado:
@@ -186,10 +188,9 @@ def buscaLocal(populacao, nos, qtdmedianas, qtdvertice):
         randomNos = []
         nos_copy = copy.deepcopy(nos)
         removeMedianas(nos_copy,individuo)
+        random.seed()
         for k in range(qtdmedianas):
             aux = random.choice(list(nos_copy))
-            while aux in randomNos:
-                aux = random.choice(list(nos_copy))
             randomNos.append(aux)
         for index, j in enumerate(randomNos):
             nos_copy = copy.deepcopy(nos)
@@ -210,7 +211,6 @@ def buscaLocal(populacao, nos, qtdmedianas, qtdvertice):
 def montaIndividuo(nos, medianas):
     fitness = 0
     alocado = False
-    #print(len(nos))
     for i in medianas:
         i.ocupado = i.peso
     for i in nos:
@@ -247,7 +247,7 @@ qtdvertice, qtdmedianas = montaConjuto(nos)
 montaPopulacao(
     copy.deepcopy(nos), calculaIndividuos(qtdvertice), medianas, qtdmedianas, populacao
 )
-for i in range(100):
+for i in range(40):
     nos_copy = copy.deepcopy(nos)
     filho, filho_fitness, normal = fazCruzamento(
         copy.deepcopy(populacao), nos_copy, qtdmedianas
