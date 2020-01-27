@@ -275,16 +275,16 @@ qtdvertice, qtdmedianas = montaConjuto(nos)
 montaPopulacao(
     copy.deepcopy(nos), calculaIndividuos(qtdvertice), medianas, qtdmedianas, populacao
 )
-for i in range(300):
+for i in range(1000):
     nos_copy = copy.deepcopy(nos)
     filho, filho_fitness, normal = fazCruzamento(
         copy.deepcopy(populacao), nos_copy, qtdmedianas
     )
-    buscaLocalFilho(populacao,nos_copy,qtdmedianas,qtdvertice,filho,filho_fitness)
+    #buscaLocalFilho(populacao,nos_copy,qtdmedianas,qtdvertice,filho,filho_fitness)
     if filho_fitness <= populacao[len(populacao) - 1][0] and normal:
         populacao.remove(populacao[len(populacao) - 1])
         heapq.heappush(populacao, (filho_fitness, filho))
-    buscaLocal(populacao, copy.deepcopy(nos), qtdmedianas, qtdvertice)
+    #buscaLocal(populacao, copy.deepcopy(nos), qtdmedianas, qtdvertice)
     nos_copy = copy.deepcopy(nos)
     fazMutacao(populacao, nos_copy, qtdmedianas)
     print(populacao[0][0])
