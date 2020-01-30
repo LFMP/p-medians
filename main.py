@@ -70,7 +70,7 @@ def montaConjuto(nos):
 
 def calculaIndividuos(qtdvertice):  # calcula a quantidade de individuos a serem gerados
     func_value = 17.5 * math.log(qtdvertice)
-    resto = func_value / 2
+    resto = func_value % 2
     if resto > 1:
         quantidade = math.ceil(func_value)
     elif resto < 1:
